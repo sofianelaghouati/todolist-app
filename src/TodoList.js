@@ -11,36 +11,55 @@ class TodoList extends Component {
         this.create = this.create.bind(this)
         this.remove = this.remove.bind(this)
         this.update = this.update.bind(this)
+        this.toggleCompletion = this.toggleCompletion.bind(this)
     }
 
-    create(newTodo){
+    create(newTodo) {
         this.setState({
-            todos:[...this.state.todos, newTodo]
+            todos: [...this.state.todos, newTodo]
         })
     }
 
-    remove(id){
+    remove(id) {
         this.setState({
             todos: this.state.todos.filter(t => t.id !== id)
         })
     }
 
-    update(id, updatedTask){
-        const updatedTodos = this.state.todos.map(todo=>{
-            if(todo.id === id){
-                return {...todo, task: updatedTask}
+    update(id, updatedTask) {
+        const updatedTodos = this.state.todos.map(todo => {
+            if (todo.id === id) {
+                return { ...todo, task: updatedTask }
             }
         })
-        this.setState({todos: updatedTodos})
+        this.setState({ todos: updatedTodos })
     }
 
+
+    toggleCompletion(id, updatedTask) {
+        const updatedTodos = this.state.todos.map(todo => {
+            if (todo.id === id) {
+                return { ...todo, completed: !todo.completed }
+            }
+        })
+        this.setState({ todos: updatedTodos })
+    }
+
+
     render() {
-        const todos = this.state.todos.map(todo=>{
-            return <Todo removeTodo={this.remove} task={todo.task} key={todo.id} id={todo.id} updateTodo={this.update}/>
-    })
+        const todos = this.state.todos.map(todo => {
+            return <Todo
+                key={todo.id}
+                task={todo.task}
+                completed={todo.completed}
+                id={todo.id}
+                updateTodo={this.update}
+                removeTodo={this.remove}
+                toggleTodo={this.toggleCompletion} />
+        })
         return (
             <div>
-                <NewTodoForm createTodo={this.create}/>
+                <NewTodoForm createTodo={this.create} />
                 <h1>Todo List ! </h1>
                 <ul>
                     {todos}
